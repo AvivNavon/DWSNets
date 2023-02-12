@@ -1,0 +1,10 @@
+numpy>=1.18.2
+torch>=1.4.0
+torchvision>=0.8.0
+tqdm>=4.45.0
+wandb
+random-fourier-features-pytorch
+scikit-learn
+matplotlib
+seaborn
+pytest
