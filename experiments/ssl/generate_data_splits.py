@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     set_logger()
-    save_path = args.name
+    save_path = Path(args.save_path) / args.name
     inr_path = Path(args.data_path)
 
     data_split = defaultdict(lambda: list)

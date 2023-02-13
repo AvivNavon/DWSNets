@@ -45,7 +45,9 @@ common_parser.add_argument(
 common_parser.add_argument(
     "--wandb-project", type=str, default="dws-nets", help="wandb project name"
 )
-common_parser.add_argument("--wandb-entity", type=str, help="wandb entity name")
+common_parser.add_argument(
+    "--wandb-entity", type=str, default=None, help="wandb entity name"
+)
 common_parser.add_argument("--wandb", dest="wandb", action="store_true")
 common_parser.add_argument("--no-wandb", dest="wandb", action="store_false")
 common_parser.set_defaults(wandb=False)

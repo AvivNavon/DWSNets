@@ -417,13 +417,13 @@ if __name__ == "__main__":
     )
     parser.add_argument("--eval-every", type=int, default=1, help="eval every")
     parser.add_argument(
-        "--augmentation", type=str2bool, default=False, help="use augmentation"
+        "--augmentation", type=str2bool, default=True, help="use augmentation"
     )
     parser.add_argument(
         "--permutation", type=str2bool, default=False, help="use permutations"
     )
     parser.add_argument(
-        "--normalize", type=str2bool, default=False, help="normalize data"
+        "--normalize", type=str2bool, default=True, help="normalize data"
     )
 
     parser.add_argument("--do-rate", type=float, default=0.0, help="dropout rate")

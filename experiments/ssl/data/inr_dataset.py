@@ -2,6 +2,7 @@ from typing import NamedTuple, Tuple, Union
 
 import numpy as np
 import torch
+
 from experiments.data import INRDataset
 
 
