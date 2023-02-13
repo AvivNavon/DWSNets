@@ -184,6 +184,9 @@ def main(
             weight_decay=5e-4,
             momentum=0.9,
         ),
+        "adamw": torch.optim.AdamW(
+            list(model.parameters()) + list(projection.parameters()), lr=lr, amsgrad=True, weight_decay=5e-4
+        )
     }[args.optim]
 
     epoch_iter = trange(epochs)
@@ -354,8 +357,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--optim",
         type=str,
-        default="adam",
-        choices=["adam", "sgd"],
+        default="adamw",
+        choices=["adam", "sgd", "adamw"],
         help="optimizer",
     )
     parser.add_argument("--num-workers", type=int, default=8, help="num workers")

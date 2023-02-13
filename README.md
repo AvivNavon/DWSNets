@@ -1,8 +1,9 @@
 # DWSNets
 
 Official implementation for [_Equivariant Architectures for Learning in Deep Weight Spaces_](https://arxiv.org/abs/2301.12780) by Aviv Navon, Aviv Shamsian, Idan Achituve, Ethan Fetaya, Gal Chechik, Haggai Maron.
-
-![](misc/sym.png)
+<p align="center"> 
+    <img src=misc/sym.png  height="400">
+</p>
 
 Our implementation follows the block structure as describe in the paper.
 

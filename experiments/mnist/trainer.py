@@ -152,6 +152,7 @@ def main(
         "sgd": torch.optim.SGD(
             model.parameters(), lr=lr, weight_decay=5e-4, momentum=0.9
         ),
+        "adamw": torch.optim.AdamW(params=model.parameters(), lr=lr, amsgrad=True, weight_decay=5e-4),
     }[args.optim]
 
     epoch_iter = trange(epochs)
@@ -248,8 +249,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--optim",
         type=str,
-        default="adam",
-        choices=["adam", "sgd"],
+        default="adamw",
+        choices=["adam", "sgd", "adamw"],
         help="optimizer",
     )
     parser.add_argument("--num-workers", type=int, default=8, help="num workers")
