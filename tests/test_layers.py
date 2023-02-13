@@ -1,18 +1,16 @@
 import torch
 
 from experiments.utils import set_seed
-from nn.layers import (
-    BiasToBiasBlock,
-    BiasToWeightBlock,
-    WeightToBiasBlock,
-    WeightToWeightBlock,
-)
+from nn.layers.bias_to_bias import BiasToBiasBlock
+from nn.layers.bias_to_weight import BiasToWeightBlock
+from nn.layers.weight_to_bias import WeightToBiasBlock
 from nn.layers.weight_to_weight import (
     FromFirstLayer,
     FromLastLayer,
     NonNeighborInternalLayer,
     ToFirstLayer,
     ToLastLayer,
+    WeightToWeightBlock,
 )
 from nn.models import DWSModel, DWSModelForClassification
 

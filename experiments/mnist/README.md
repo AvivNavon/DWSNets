@@ -21,3 +21,9 @@ Next, to run the experiment:
 ```shell
 python trainer.py --data-path dataset/mnist_splits.json --statistics-path dataset/statistics.pth --model dwsnet
 ```
+
+To enable [wandb](https://wandb.ai/site) logging:
+
+```shell
+python trainer.py --data-path dataset/mnist_splits.json --statistics-path dataset/statistics.pth --model dwsnet --wandb --wandb-project dwsnets
+```
