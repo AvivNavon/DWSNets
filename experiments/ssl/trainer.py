@@ -329,13 +329,6 @@ if __name__ == "__main__":
         batch_size=512,
     )
     parser.add_argument(
-        "--data-name",
-        type=str,
-        default="sine2coef",
-        choices=["sine2coef"],
-        help="data name",
-    )
-    parser.add_argument(
         "--model",
         type=str,
         default="dwsnet",
@@ -412,12 +405,6 @@ if __name__ == "__main__":
         default="dataset/statistics.pth",
         help="path to dataset statistics",
     )
-    parser.add_argument(
-        "--split-path",
-        type=str,
-        default="dataset/splits.json",
-        help="path to dataset statistics",
-    )
     parser.add_argument("--eval-every", type=int, default=1, help="eval every")
     parser.add_argument(
         "--augmentation", type=str2bool, default=True, help="use augmentation"
@@ -444,8 +431,8 @@ if __name__ == "__main__":
             f"_bs_{args.batch_size}_seed_{args.seed}"
         )
         wandb.init(
-            project="cannibal-nets",
-            entity="ax2",
+            project=args.wandb_project,
+            entity=args.wandb_entity,
             name=name,
             settings=wandb.Settings(start_method="fork"),
         )
