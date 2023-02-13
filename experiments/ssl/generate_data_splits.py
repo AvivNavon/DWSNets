@@ -27,8 +27,8 @@ if __name__ == "__main__":
 
     data_split = defaultdict(lambda: list)
     files = [f.as_posix() for f in inr_path.glob("**/*.pth")]
-    train, test = train_test_split(files, test_size=args.test_size)
-    train, val = train_test_split(train, test_size=args.test_size)
+    train, test = train_test_split(files, test_size=args.val_size)
+    train, val = train_test_split(train, test_size=args.val_size)
 
     data_split["train"] = train
     data_split["test"] = test
