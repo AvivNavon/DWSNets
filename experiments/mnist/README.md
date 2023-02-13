@@ -1,4 +1,4 @@
-# MNIST INRs Classification
+# MNIST INRs classification
 
 The INR data is available [here](TODO). Please download the data and place it in, e.g. `dataset/mnist-inrs` folder.
 
@@ -22,8 +22,8 @@ Next, to run the experiment:
 python trainer.py --data-path dataset/mnist_splits.json --statistics-path dataset/statistics.pth --model dwsnet
 ```
 
-To enable [wandb](https://wandb.ai/site) logging:
+To enable [wandb](https://wandb.ai/site) experiment tracking:
 
 ```shell
-python trainer.py --data-path dataset/mnist_splits.json --statistics-path dataset/statistics.pth --model dwsnet --wandb --wandb-project dwsnets
+python trainer.py --data-path dataset/mnist_splits.json --statistics-path dataset/statistics.pth --model dwsnet --wandb --wandb-project dws-nets --wandb-entity <your-entity>
 ```
