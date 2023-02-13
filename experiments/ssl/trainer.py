@@ -338,8 +338,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model",
         type=str,
-        default="cannibal",
-        choices=["cannibal", "baseline", "re-basin", "inr2vec", "wsl"],
+        default="dwsnet",
+        choices=["dwsnet", "mlp"],
         help="model",
     )
     parser.add_argument(
