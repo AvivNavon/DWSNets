@@ -152,7 +152,9 @@ def main(
         "sgd": torch.optim.SGD(
             model.parameters(), lr=lr, weight_decay=5e-4, momentum=0.9
         ),
-        "adamw": torch.optim.AdamW(params=model.parameters(), lr=lr, amsgrad=True, weight_decay=5e-4),
+        "adamw": torch.optim.AdamW(
+            params=model.parameters(), lr=lr, amsgrad=True, weight_decay=5e-4
+        ),
     }[args.optim]
 
     epoch_iter = trange(epochs)

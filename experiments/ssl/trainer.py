@@ -185,8 +185,11 @@ def main(
             momentum=0.9,
         ),
         "adamw": torch.optim.AdamW(
-            list(model.parameters()) + list(projection.parameters()), lr=lr, amsgrad=True, weight_decay=5e-4
-        )
+            list(model.parameters()) + list(projection.parameters()),
+            lr=lr,
+            amsgrad=True,
+            weight_decay=5e-4,
+        ),
     }[args.optim]
 
     epoch_iter = trange(epochs)
