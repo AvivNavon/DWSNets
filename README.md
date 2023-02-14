@@ -5,7 +5,7 @@ Official implementation for [_Equivariant Architectures for Learning in Deep Wei
     <img src=misc/sym.png  height="400">
 </p>
 
-Our implementation follows the block structure as describe in the paper.
+Our implementation follows the block structure as described in the paper.
 
 ![](misc/blocks.png)
 
