@@ -12,7 +12,7 @@ This will create a json file `dataset/mnist_splits.json`.
 
 Next, compute the dataset (INRs) statistics using `compute_statistics.py`:
 ```shell
-python compute_statistics.py --data-path dataset/ssl_splits.json
+python compute_statistics.py --data-path dataset/mnist_splits.json
 ```
 This will create `dataset/statistics.pth` object.
 
