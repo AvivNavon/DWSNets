@@ -310,7 +310,7 @@ class DownSampleDWSLayer(DWSLayer):
         weights = list(weights)
         weights[0] = w0
 
-        # cannibal layer out
+        # dws layer out
         weights, biases = super().forward((tuple(weights), biases))
 
         # up-sample

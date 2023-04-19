@@ -142,7 +142,7 @@ class DWSModel(nn.Module):
 
         if input_dim_downsample is None:
             layers = [
-                CannibalLayer(
+                DWSLayer(
                     weight_shapes=weight_shapes,
                     bias_shapes=bias_shapes,
                     in_features=input_features,
@@ -167,7 +167,7 @@ class DWSModel(nn.Module):
 
                         ReLU(),
                         Dropout(dropout_rate),
-                        CannibalLayer(
+                        DWSLayer(
                             weight_shapes=weight_shapes,
                             bias_shapes=bias_shapes,
                             in_features=hidden_dim,
@@ -186,7 +186,7 @@ class DWSModel(nn.Module):
                 )
         else:
             layers = [
-                DownSampleCannibalLayer(
+                DownSampleDWSLayer(
                     weight_shapes=weight_shapes,
                     bias_shapes=bias_shapes,
                     in_features=input_features,
@@ -211,7 +211,7 @@ class DWSModel(nn.Module):
                     [
                         ReLU(),
                         Dropout(dropout_rate),
-                        DownSampleCannibalLayer(
+                        DownSampleDWSLayer(
                             weight_shapes=weight_shapes,
                             bias_shapes=bias_shapes,
                             in_features=hidden_dim,
@@ -274,7 +274,7 @@ class DWSModelForClassification(nn.Module):
         diagonal=False,
     ):
         super().__init__()
-        self.layers = CannibalModel(
+        self.layers = DWSModel(
             weight_shapes=weight_shapes,
             bias_shapes=bias_shapes,
             input_features=input_features,
