@@ -130,6 +130,7 @@ def main(
             n_out_fc=args.n_out_fc,
             dropout_rate=args.do_rate,
             bn=args.add_bn,
+            diagonal=args.diagonal,
         ).to(device),
         "mlp": MLPModelForClassification(
             in_dim=sum([w.numel() for w in weight_shapes + bias_shapes]),
@@ -322,6 +323,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--normalize", type=str2bool, default=True, help="normalize data"
     )
+    parser.add_argument("--diagonal", type=str2bool, default=False, help="diagonal DWSNet")
     parser.add_argument("--do-rate", type=float, default=0.0, help="dropout rate")
     parser.add_argument(
         "--add-bn", type=str2bool, default=True, help="add batch norm layers"

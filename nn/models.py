@@ -95,33 +95,34 @@ class MLPModelForClassification(nn.Module):
 
 class DWSModel(nn.Module):
     def __init__(
-        self,
-        weight_shapes: Tuple[Tuple[int, int], ...],
-        bias_shapes: Tuple[
-            Tuple[int,],
-            ...,
-        ],
-        input_features,
-        hidden_dim,
-        n_hidden=2,
-        output_features=None,
-        reduction="max",
-        bias=True,
-        n_fc_layers=1,
-        num_heads=8,
-        set_layer="sab",
-        input_dim_downsample=None,
-        dropout_rate=0.0,
-        add_skip=False,
-        add_layer_skip=False,
-        init_scale=1e-4,
-        init_off_diag_scale_penalty=1.0,
-        bn=False,
+            self,
+            weight_shapes: Tuple[Tuple[int, int], ...],
+            bias_shapes: Tuple[
+                Tuple[
+                    int,
+                ],
+                ...,
+            ],
+            input_features,
+            hidden_dim,
+            n_hidden=2,
+            output_features=None,
+            reduction="max",
+            bias=True,
+            n_fc_layers=1,
+            num_heads=8,
+            set_layer="sab",
+            input_dim_downsample=None,
+            dropout_rate=0.0,
+            add_skip=False,
+            add_layer_skip=False,
+            init_scale=1e-4,
+            init_off_diag_scale_penalty=1.,
+            bn=False,
+            diagonal=False,
     ):
         super().__init__()
-        assert (
-            len(weight_shapes) > 2
-        ), "the current implementation only support input networks with M>2 layers."
+        assert len(weight_shapes) > 2, "the current implementation only support input networks with M>2 layers."
 
         self.input_features = input_features
         self.input_dim_downsample = input_dim_downsample
@@ -130,16 +131,18 @@ class DWSModel(nn.Module):
 
         self.add_skip = add_skip
         if self.add_skip:
-            self.skip = nn.Linear(input_features, output_features, bias=bias)
+            self.skip = nn.Linear(
+                input_features,
+                output_features,
+                bias=bias
+            )
             with torch.no_grad():
-                torch.nn.init.constant_(
-                    self.skip.weight, 1.0 / self.skip.weight.numel()
-                )
-                torch.nn.init.constant_(self.skip.bias, 0.0)
+                torch.nn.init.constant_(self.skip.weight, 1. / self.skip.weight.numel())
+                torch.nn.init.constant_(self.skip.bias, 0.)
 
         if input_dim_downsample is None:
             layers = [
-                DWSLayer(
+                CannibalLayer(
                     weight_shapes=weight_shapes,
                     bias_shapes=bias_shapes,
                     in_features=input_features,
@@ -152,6 +155,7 @@ class DWSModel(nn.Module):
                     add_skip=add_layer_skip,
                     init_scale=init_scale,
                     init_off_diag_scale_penalty=init_off_diag_scale_penalty,
+                    diagonal=diagonal,
                 ),
             ]
             for i in range(n_hidden):
@@ -160,15 +164,14 @@ class DWSModel(nn.Module):
 
                 layers.extend(
                     [
+
                         ReLU(),
                         Dropout(dropout_rate),
-                        DWSLayer(
+                        CannibalLayer(
                             weight_shapes=weight_shapes,
                             bias_shapes=bias_shapes,
                             in_features=hidden_dim,
-                            out_features=hidden_dim
-                            if i != (n_hidden - 1)
-                            else output_features,
+                            out_features=hidden_dim if i != (n_hidden - 1) else output_features,
                             reduction=reduction,
                             bias=bias,
                             n_fc_layers=n_fc_layers,
@@ -177,12 +180,13 @@ class DWSModel(nn.Module):
                             add_skip=add_layer_skip,
                             init_scale=init_scale,
                             init_off_diag_scale_penalty=init_off_diag_scale_penalty,
+                            diagonal=diagonal,
                         ),
                     ]
                 )
         else:
             layers = [
-                DownSampleDWSLayer(
+                DownSampleCannibalLayer(
                     weight_shapes=weight_shapes,
                     bias_shapes=bias_shapes,
                     in_features=input_features,
@@ -196,6 +200,7 @@ class DWSModel(nn.Module):
                     add_skip=add_layer_skip,
                     init_scale=init_scale,
                     init_off_diag_scale_penalty=init_off_diag_scale_penalty,
+                    diagonal=diagonal,
                 ),
             ]
             for i in range(n_hidden):
@@ -206,13 +211,11 @@ class DWSModel(nn.Module):
                     [
                         ReLU(),
                         Dropout(dropout_rate),
-                        DownSampleDWSLayer(
+                        DownSampleCannibalLayer(
                             weight_shapes=weight_shapes,
                             bias_shapes=bias_shapes,
                             in_features=hidden_dim,
-                            out_features=hidden_dim
-                            if i != (n_hidden - 1)
-                            else output_features,
+                            out_features=hidden_dim if i != (n_hidden - 1) else output_features,
                             reduction=reduction,
                             bias=bias,
                             n_fc_layers=n_fc_layers,
@@ -222,6 +225,7 @@ class DWSModel(nn.Module):
                             add_skip=add_layer_skip,
                             init_scale=init_scale,
                             init_off_diag_scale_penalty=init_off_diag_scale_penalty,
+                            diagonal=diagonal,
                         ),
                     ]
                 )
@@ -244,7 +248,9 @@ class DWSModelForClassification(nn.Module):
         self,
         weight_shapes: Tuple[Tuple[int, int], ...],
         bias_shapes: Tuple[
-            Tuple[int,],
+            Tuple[
+                int,
+            ],
             ...,
         ],
         input_features,
@@ -259,15 +265,16 @@ class DWSModelForClassification(nn.Module):
         n_out_fc=1,
         dropout_rate=0.0,
         input_dim_downsample=None,
-        init_scale=1.0,
-        init_off_diag_scale_penalty=1.0,
+        init_scale=1.,
+        init_off_diag_scale_penalty=1.,
         bn=False,
         add_skip=False,
         add_layer_skip=False,
         equiv_out_features=None,
+        diagonal=False,
     ):
         super().__init__()
-        self.layers = DWSModel(
+        self.layers = CannibalModel(
             weight_shapes=weight_shapes,
             bias_shapes=bias_shapes,
             input_features=input_features,
@@ -286,6 +293,7 @@ class DWSModelForClassification(nn.Module):
             bn=bn,
             add_skip=add_skip,
             add_layer_skip=add_layer_skip,
+            diagonal=diagonal,
         )
         self.dropout = Dropout(dropout_rate)
         self.relu = ReLU()

@@ -73,7 +73,9 @@ class DWSLayer(BaseLayer):
         self,
         weight_shapes: Tuple[Tuple[int, int], ...],
         bias_shapes: Tuple[
-            Tuple[int,],
+            Tuple[
+                int,
+            ],
             ...,
         ],
         in_features,
@@ -84,8 +86,9 @@ class DWSLayer(BaseLayer):
         num_heads=8,
         set_layer="sab",
         add_skip=False,
-        init_scale=1.0,
-        init_off_diag_scale_penalty=1.0,
+        init_scale=1.,
+        init_off_diag_scale_penalty=1.,
+        diagonal=False,
     ):
         super().__init__(
             in_features,
@@ -96,6 +99,7 @@ class DWSLayer(BaseLayer):
             num_heads=num_heads,
             set_layer=set_layer,
         )
+        self.diagonal = diagonal
         self.weight_shapes = weight_shapes
         self.bias_shapes = bias_shapes
         self.n_matrices = len(weight_shapes) + len(bias_shapes)
@@ -110,6 +114,7 @@ class DWSLayer(BaseLayer):
             n_fc_layers=n_fc_layers,
             num_heads=num_heads,
             set_layer=set_layer,
+            diagonal=diagonal,
         )
         self.bias_to_bias = BiasToBiasBlock(
             in_features,
@@ -120,6 +125,7 @@ class DWSLayer(BaseLayer):
             n_fc_layers=n_fc_layers,
             num_heads=num_heads,
             set_layer=set_layer,
+            diagonal=diagonal,
         )
         self.bias_to_weight = BiasToWeightBlock(
             in_features,
@@ -131,6 +137,7 @@ class DWSLayer(BaseLayer):
             n_fc_layers=n_fc_layers,
             num_heads=num_heads,
             set_layer=set_layer,
+            diagonal=diagonal,
         )
 
         self.weight_to_bias = WeightToBiasBlock(
@@ -143,6 +150,7 @@ class DWSLayer(BaseLayer):
             n_fc_layers=n_fc_layers,
             num_heads=num_heads,
             set_layer=set_layer,
+            diagonal=diagonal,
         )
 
         self._init_model_params(init_scale, init_off_diag_scale_penalty)
@@ -219,7 +227,9 @@ class DownSampleDWSLayer(DWSLayer):
         downsample_dim: int,
         weight_shapes: Tuple[Tuple[int, int], ...],
         bias_shapes: Tuple[
-            Tuple[int,],
+            Tuple[
+                int,
+            ],
             ...,
         ],
         in_features,
@@ -230,9 +240,11 @@ class DownSampleDWSLayer(DWSLayer):
         num_heads=8,
         set_layer="sab",
         add_skip=False,
-        init_scale=1.0,
-        init_off_diag_scale_penalty=1.0,
+        init_scale=1.,
+        init_off_diag_scale_penalty=1.,
+        diagonal=False,
     ):
+
         d0 = weight_shapes[0][0]
         new_weight_shapes = list(weight_shapes)
         new_weight_shapes[0] = (downsample_dim, weight_shapes[0][1])
@@ -250,6 +262,7 @@ class DownSampleDWSLayer(DWSLayer):
             add_skip=add_skip,
             init_scale=init_scale,
             init_off_diag_scale_penalty=init_off_diag_scale_penalty,
+            diagonal=diagonal,
         )
 
         self.downsample_dim = downsample_dim

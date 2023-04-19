@@ -605,6 +605,7 @@ class WeightToWeightBlock(BaseLayer):
         n_fc_layers: int = 1,
         num_heads: int = 8,
         set_layer: str = "sab",
+        diagonal: bool = False,
     ):
         super().__init__(
             in_features=in_features,
@@ -620,11 +621,14 @@ class WeightToWeightBlock(BaseLayer):
 
         self.shapes = shapes
         self.n_layers = len(shapes)
+        self.diagonal = diagonal
 
         self.layers = ModuleDict()
         # construct layers:
         for i in range(self.n_layers):
             for j in range(self.n_layers):
+                if self.diagonal and abs(i - j) > 1:
+                    continue
                 if i == j:
                     if i == 0:
                         # W0 -> W0
@@ -823,6 +827,8 @@ class WeightToWeightBlock(BaseLayer):
         ] * len(x)
         for i in range(self.n_layers):
             for j in range(self.n_layers):
+                if self.diagonal and abs(i - j) > 1:
+                    continue
                 out_weights[j] = out_weights[j] + self.layers[f"{i}_{j}"](x[i])
         return tuple(out_weights)
 

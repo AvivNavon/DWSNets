@@ -182,6 +182,7 @@ class BiasToBiasBlock(BaseLayer):
         n_fc_layers: int = 1,
         num_heads: int = 8,
         set_layer: str = "sab",
+        diagonal=False,
     ):
         super().__init__(
             in_features=in_features,
@@ -196,49 +197,72 @@ class BiasToBiasBlock(BaseLayer):
 
         self.shapes = shapes
         self.n_layers = len(shapes)
+        self.diagonal = diagonal
 
         self.layers = ModuleDict()
         # construct layers:
-        for i in range(self.n_layers):
-            for j in range(self.n_layers):
-                if i == j:
-                    self.layers[f"{i}_{j}"] = SelfToSelfLayer(
-                        in_features=in_features,
-                        out_features=out_features,
-                        in_shape=shapes[i],
-                        out_shape=shapes[j],
-                        reduction=reduction,
-                        bias=bias,
-                        num_heads=num_heads,
-                        set_layer=set_layer,
-                        n_fc_layers=n_fc_layers,
-                        is_output_layer=(
-                            j == self.n_layers - 1
-                        ),  # todo: make sure this condition is correct
-                    )
-                else:
-                    self.layers[f"{i}_{j}"] = SelfToOtherLayer(
-                        in_features=in_features,
-                        out_features=out_features,
-                        in_shape=shapes[i],
-                        out_shape=shapes[j],
-                        reduction=reduction,
-                        bias=bias,
-                        n_fc_layers=n_fc_layers,
-                        first_dim_is_output=(
-                            i == self.n_layers - 1
-                        ),  # todo: make sure this condition is correct
-                        last_dim_is_output=(
-                            j == self.n_layers - 1
-                        ),  # todo: make sure this condition is correct
-                    )
+        if self.diagonal:
+            for i in range(self.n_layers):
+                self.layers[f"{i}_{i}"] = SelfToSelfLayer(
+                    in_features=in_features,
+                    out_features=out_features,
+                    in_shape=shapes[i],
+                    out_shape=shapes[i],
+                    reduction=reduction,
+                    bias=bias,
+                    num_heads=num_heads,
+                    set_layer=set_layer,
+                    n_fc_layers=n_fc_layers,
+                    is_output_layer=(
+                        i == self.n_layers - 1
+                    ),
+                )
+        # full DWS layers:
+        else:
+            for i in range(self.n_layers):
+                for j in range(self.n_layers):
+                    if i == j:
+                        self.layers[f"{i}_{j}"] = SelfToSelfLayer(
+                            in_features=in_features,
+                            out_features=out_features,
+                            in_shape=shapes[i],
+                            out_shape=shapes[j],
+                            reduction=reduction,
+                            bias=bias,
+                            num_heads=num_heads,
+                            set_layer=set_layer,
+                            n_fc_layers=n_fc_layers,
+                            is_output_layer=(
+                                j == self.n_layers - 1
+                            ),
+                        )
+                    else:
+                        self.layers[f"{i}_{j}"] = SelfToOtherLayer(
+                            in_features=in_features,
+                            out_features=out_features,
+                            in_shape=shapes[i],
+                            out_shape=shapes[j],
+                            reduction=reduction,
+                            bias=bias,
+                            n_fc_layers=n_fc_layers,
+                            first_dim_is_output=(
+                                i == self.n_layers - 1
+                            ),
+                            last_dim_is_output=(
+                                j == self.n_layers - 1
+                            ),
+                        )
 
     def forward(self, x: Tuple[torch.tensor]):
         out_biases = [
             0.0,
         ] * len(x)
-        for i in range(self.n_layers):
-            for j in range(self.n_layers):
-                out_biases[j] = out_biases[j] + self.layers[f"{i}_{j}"](x[i])
+        if self.diagonal:
+            for i in range(self.n_layers):
+                out_biases[i] = self.layers[f"{i}_{i}"](x[i])
+        else:
+            for i in range(self.n_layers):
+                for j in range(self.n_layers):
+                    out_biases[j] = out_biases[j] + self.layers[f"{i}_{j}"](x[i])
 
         return tuple(out_biases)
