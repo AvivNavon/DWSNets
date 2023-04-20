@@ -8,8 +8,8 @@ from experiments.utils import common_parser
 
 
 parser = ArgumentParser(
-        "MNIST - Reconstruct images grid from INRs", parents=[common_parser]
-    )
+    "MNIST - Reconstruct images grid from INRs", parents=[common_parser]
+)
 args = parser.parse_args()
 
 dataset = INRImageDataset(
