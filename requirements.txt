@@ -1,4 +1,4 @@
-numpy>=1.23.4
+numpy
 torch>=1.12.1
 torchvision
 tqdm
