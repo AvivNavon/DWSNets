@@ -341,6 +341,7 @@ class WeightToBiasBlock(BaseLayer):
         n_fc_layers: int = 1,
         num_heads: int = 8,
         set_layer: str = "sab",
+        diagonal: bool = False,
     ):
         super().__init__(
             in_features=in_features,
@@ -358,11 +359,14 @@ class WeightToBiasBlock(BaseLayer):
         self.weight_shapes = weight_shapes
         self.bias_shapes = bias_shapes
         self.n_layers = len(bias_shapes)
+        self.diagonal = diagonal
 
         self.layers = ModuleDict()
         # construct layers:
         for i in range(self.n_layers):
             for j in range(self.n_layers):
+                if self.diagonal and not ((i == j) or (i == j + 1)):
+                    continue
                 if i == j:
                     self.layers[f"{i}_{j}"] = SameLayer(
                         in_features=in_features,
@@ -416,6 +420,8 @@ class WeightToBiasBlock(BaseLayer):
         ] * len(x)
         for i in range(self.n_layers):
             for j in range(self.n_layers):
+                if self.diagonal and not ((i == j) or (i == j + 1)):
+                    continue
                 out_weights[j] = out_weights[j] + self.layers[f"{i}_{j}"](x[i])
 
         return tuple(out_weights)
