@@ -31,6 +31,11 @@ pip install -e .
 
 To run specific experiment, please follow the instructions in the README file within each experiment folder. 
 It provides full instructions and details for downloading the data and reproducing the results reported in the paper.
+### Dataset 
+**The datasets are available [here](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0).**
+- [Sine regression INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=sine-regression-inrs.zip)
+- [MNIST INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=mnist-inrs.zip)
+- [SSL INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=ssl-inrs.zip)
 
 ## Citation
 
