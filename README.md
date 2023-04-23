@@ -27,6 +27,10 @@ cd DWSNets
 pip install -e .
 ```
 
+## Introduction Notebook
+An introduction notebook for INR classification with DWSNets: 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AvivNavon/DWSNets/blob/main/notebooks/mnist-inr-classification.ipynb)
+
 ## Run experiment
 
 To run specific experiment, please follow the instructions in the README file within each experiment folder. 
