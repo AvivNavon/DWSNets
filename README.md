@@ -40,6 +40,7 @@ It provides full instructions and details for downloading the data and reproduci
 - [Sine regression INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=sine-regression-inrs.zip)
 - [MNIST INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=mnist-inrs.zip)
 - [SSL INRs](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=ssl-inrs.zip)
+- [CIFAR10 classifiers](https://www.dropbox.com/sh/56pakaxe58z29mq/AABtWNkRYroLYe_cE3c90DXVa?dl=0&preview=cifar_clf_models.zip)
 
 ## Citation
 
