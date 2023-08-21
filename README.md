@@ -47,14 +47,20 @@ It provides full instructions and details for downloading the data and reproduci
 If you find our work or this code to be useful in your own research, please consider citing the following paper:
 
 ```bib
-@article{
-    navon2023equivariant,
-    title={Equivariant Architectures for Learning in Deep Weight Spaces},
-    author={
-        Navon, Aviv and Shamsian, Aviv and Achituve, Idan and Fetaya, 
-        Ethan and Chechik, Gal and Maron, Haggai
-    },
-    journal={arXiv preprint arXiv:2301.12780},
-    year={2023}
+
+@InProceedings{pmlr-v202-navon23a,
+  title = 	 {Equivariant Architectures for Learning in Deep Weight Spaces},
+  author =       {Navon, Aviv and Shamsian, Aviv and Achituve, Idan and Fetaya, Ethan and Chechik, Gal and Maron, Haggai},
+  booktitle = 	 {Proceedings of the 40th International Conference on Machine Learning},
+  pages = 	 {25790--25816},
+  year = 	 {2023},
+  editor = 	 {Krause, Andreas and Brunskill, Emma and Cho, Kyunghyun and Engelhardt, Barbara and Sabato, Sivan and Scarlett, Jonathan},
+  volume = 	 {202},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {23--29 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {https://proceedings.mlr.press/v202/navon23a/navon23a.pdf},
+  url = 	 {https://proceedings.mlr.press/v202/navon23a.html},
 }
+
 ```
